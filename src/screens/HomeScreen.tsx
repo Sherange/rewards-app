@@ -1,8 +1,12 @@
 import { View, StyleSheet, Text } from 'react-native';
 import AppButton from '../components/AppButton';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
-  const onPress = () => {};
+  const navigation = useNavigation();
+
+  const onPress = () => navigation.navigate('RewardsScreen');
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>HomeScreen</Text>
