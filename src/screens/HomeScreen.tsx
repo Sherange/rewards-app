@@ -1,8 +1,12 @@
 import { View, StyleSheet, Text } from 'react-native';
+import AppButton from '../components/AppButton';
+
 const HomeScreen = () => {
+  const onPress = () => {};
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home</Text>
+      <Text style={styles.text}>HomeScreen</Text>
+      <AppButton title="Go to RewardsScreen" onPress={onPress} />
     </View>
   );
 };
