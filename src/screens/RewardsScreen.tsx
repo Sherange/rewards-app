@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text } from 'react-native';
-const Home = () => {
+const RewardsScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home</Text>
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default RewardsScreen;
