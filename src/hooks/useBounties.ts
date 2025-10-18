@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { BountiesResponse, Bounty } from '../types/reward';
+import { BountiesResponse, Reward } from '../types/reward';
+import apiClient from '../utils/apiClient';
 
 interface UseBountiesOptions {
   limit?: number;
   page?: number;
-  autoFetch?: boolean;
 }
 
 interface UseBountiesReturn {
-  data: Bounty[] | null;
+  data: Reward[] | null;
   loading: boolean;
   error: string | null;
   hasNextPage: boolean;
@@ -21,15 +21,12 @@ interface UseBountiesReturn {
   refetch: () => Promise<void>;
 }
 
-const API_BASE_URL =
-  'https://staging.helloagain.at/api/v1/clients/5189/bounties';
-
 export const useBounties = (
   options: UseBountiesOptions = {},
 ): UseBountiesReturn => {
-  const { limit = 10, page = 1, autoFetch = true } = options;
+  const { limit = 10, page = 1 } = options;
 
-  const [data, setData] = useState<Bounty[] | null>(null);
+  const [data, setData] = useState<Reward[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(page);
@@ -44,25 +41,33 @@ export const useBounties = (
       setError(null);
 
       try {
-        const url = `${API_BASE_URL}/?limit=${limit}&page=${targetPage}`;
-        const response = await fetch(url);
+        const queryParams = new URLSearchParams({
+          limit: String(limit),
+          page: String(targetPage),
+        }).toString();
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result: BountiesResponse = await response.json();
+        const response = await apiClient.get<BountiesResponse>(
+          `clients/5189/bounties/?${queryParams}`,
+        );
+        const result = response.data;
 
         setData(result.results);
         setTotalCount(result.count);
         setHasNextPage(!!result.next);
         setHasPreviousPage(!!result.previous);
         setCurrentPage(targetPage);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'An unknown error occurred';
-        setError(errorMessage);
-        console.error('Error fetching bounties:', err);
+      } catch (e) {
+        if (
+          e &&
+          typeof e === 'object' &&
+          'message' in e &&
+          typeof (e as any).message === 'string'
+        ) {
+          setError((e as any).message);
+        } else {
+          setError('An unknown error occurred.');
+        }
+        console.error('Error fetching bounties:', e);
       } finally {
         setLoading(false);
       }
@@ -87,10 +92,8 @@ export const useBounties = (
   }, [fetchBounties, currentPage]);
 
   useEffect(() => {
-    if (autoFetch) {
-      fetchBounties();
-    }
-  }, [autoFetch, fetchBounties]);
+    fetchBounties();
+  }, [fetchBounties]);
 
   return {
     data,
