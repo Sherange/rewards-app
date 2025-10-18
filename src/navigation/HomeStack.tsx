@@ -10,6 +10,7 @@ const HomeStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerBackTitle: 'Back',
+        headerShown: false,
       }}
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
