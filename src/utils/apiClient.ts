@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+import { API_CONFIG } from '../config/api';
 const apiClient = axios.create({
-  baseURL: 'https://your-api-base-url.com/api', // 🔧 Change this to your API base URL
+  baseURL: API_CONFIG.BASE_URL, // 🔧 Change this to your API base URL
   timeout: 10000, // optional
 });
 
@@ -22,7 +22,7 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   response => {
-    return response.data;
+    return response;
   },
   async error => {
     if (error.response) {
