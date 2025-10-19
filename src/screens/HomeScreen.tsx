@@ -5,71 +5,94 @@ import {
   Dimensions,
   FlatList,
   Image,
+  ActivityIndicator,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+
 import type { Reward } from '../types/reward';
+import { useBounties } from '../hooks/useBounties';
+import AppImage from '../components/AppImage';
 const { width } = Dimensions.get('window');
 
 const CARD_WIDTH = (width - 48) / 2; // two columns + padding
 
-const rewards = [
-  {
-    id: '1',
-    name: 'Coffee Voucher',
-    amount: 500,
-    description: 'Get a free coffee from our partner cafés.',
-    image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93',
-  },
-  {
-    id: '2',
-    name: 'Movie Ticket',
-    amount: 1200,
-    description: 'Enjoy a movie night on us!',
-    image: 'https://images.unsplash.com/photo-1581905764498-f1b60bae941a',
-  },
-  {
-    id: '3',
-    name: 'Gift Card',
-    amount: 2500,
-    description: 'Use this card for shopping at any outlet.',
-    image: 'https://images.unsplash.com/photo-1619530902914-7e3ad10bc62a',
-  },
-  {
-    id: '4',
-    name: 'Dinner Coupon',
-    amount: 3000,
-    description: 'Enjoy a fine dining experience at top restaurants.',
-    image: 'https://images.unsplash.com/photo-1551218808-94e220e084d2',
-  },
-];
-
 const HomeScreen = () => {
   const navigation = useNavigation();
 
+  const { data, loading, error, hasNextPage, fetchNextPage } = useBounties();
+
   const onPress = () => navigation.navigate('RewardsScreen');
+
+  const handleEndReached = () => {
+    if (hasNextPage && !loading) {
+      fetchNextPage();
+    }
+  };
 
   const renderItem = ({ item }: { item: Reward }) => (
     <Pressable style={styles.card} onPress={onPress}>
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.amount}>Rs. {item.amount.toFixed(2)}</Text>
-      <Text style={styles.description} numberOfLines={2}>
-        {item.description}
+      <AppImage uri={item.image} style={styles.image} />
+
+      <Text style={styles.name} numberOfLines={1} ellipsizeMode="clip">
+        {item.name}
       </Text>
+      {item?.amount && (
+        <Text style={styles.amount}>$ {item.amount.toFixed(2)}</Text>
+      )}
+      <Pressable style={styles.claimButton}>
+        <Text style={styles.claimText}>Claim</Text>
+      </Pressable>
     </Pressable>
   );
 
+  const renderFooter = () => {
+    if (!loading) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color="#007bff" />
+      </View>
+    );
+  };
+
+  const renderError = () => {
+    if (!error) return null;
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  };
+
+  if (!data && loading) {
+    return (
+      <SafeAreaView style={styles.homeContainer}>
+        <View style={styles.initialLoader}>
+          <ActivityIndicator size="large" color="#007bff" />
+          <Text style={styles.loadingText}>Loading rewards...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.homeContainer}>
+      {renderError()}
+      <Text testID="homeTitle" style={styles.title}>
+        Rewards
+      </Text>
       <FlatList
-        data={rewards}
+        data={data || []}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         numColumns={2}
         contentContainerStyle={styles.container}
         columnWrapperStyle={styles.column}
         showsVerticalScrollIndicator={false}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={renderFooter}
       />
     </SafeAreaView>
   );
@@ -79,6 +102,14 @@ const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
     backgroundColor: '#f4f4f4',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#3276c3',
+    textAlign: 'left',
+    marginVertical: 16,
+    paddingHorizontal: 16,
   },
   container: {
     paddingHorizontal: 16,
@@ -91,33 +122,76 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 12,
     width: CARD_WIDTH,
+    height: 200,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    padding: 8,
   },
   image: {
     width: '100%',
     height: 100,
-    borderRadius: 8,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     marginBottom: 8,
   },
   name: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
+    marginBottom: 4,
   },
   amount: {
     fontSize: 14,
     fontWeight: '500',
     color: '#007bff',
-    marginVertical: 4,
+    marginBottom: 4,
   },
-  description: {
-    fontSize: 12,
+  footerLoader: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  initialLoader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
     color: '#666',
+  },
+  errorContainer: {
+    backgroundColor: '#ffebee',
+    padding: 12,
+    margin: 16,
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#f44336',
+  },
+  errorText: {
+    color: '#c62828',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  claimButton: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    width: '100%',
+    backgroundColor: '#3276c3',
+    borderRadius: 8,
+  },
+  claimText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
   },
 });
 
