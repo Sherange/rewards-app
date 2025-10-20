@@ -1,7 +1,7 @@
 import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeStack from './navigation/HomeStack';
+import TabNavigation from './navigation/TabNavigation';
 
 import { store } from './store';
 import { Provider } from 'react-redux';
@@ -14,7 +14,7 @@ function App() {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <Provider store={store}>
         <NavigationContainer>
-          <HomeStack />
+          <TabNavigation />
         </NavigationContainer>
       </Provider>
     </SafeAreaProvider>

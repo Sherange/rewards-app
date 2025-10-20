@@ -1,6 +1,6 @@
 export type HomeStackParamList = {
   HomeScreen: undefined;
-  RewardsScreen: undefined;
+  BountyScreen: undefined;
 };
 
 declare global {

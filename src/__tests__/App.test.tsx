@@ -17,11 +17,15 @@ jest.mock('@react-navigation/native', () => ({
     children,
 }));
 
-// Mock the navigation stack
-jest.mock('../navigation/HomeStack', () => {
+// Mock the tab navigation
+jest.mock('../navigation/TabNavigation', () => {
   const React = require('react');
-  return function MockHomeStack() {
-    return React.createElement('View', { testID: 'home-stack' }, 'HomeStack');
+  return function MockTabNavigation() {
+    return React.createElement(
+      'View',
+      { testID: 'tab-navigation' },
+      'TabNavigation',
+    );
   };
 });
 
@@ -41,11 +45,11 @@ jest.mock('../store', () => ({
 describe('App', () => {
   test('renders without crashing', () => {
     const { getByTestId } = render(<App />);
-    expect(getByTestId('home-stack')).toBeTruthy();
+    expect(getByTestId('tab-navigation')).toBeTruthy();
   });
 
   test('renders the main navigation structure', () => {
     const { getByTestId } = render(<App />);
-    expect(getByTestId('home-stack')).toBeTruthy();
+    expect(getByTestId('tab-navigation')).toBeTruthy();
   });
 });
