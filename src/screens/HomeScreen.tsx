@@ -23,7 +23,7 @@ const HomeScreen = () => {
 
   const { data, loading, error, fetchNextPage } = useBounties();
 
-  const onPress = () => navigation.navigate('RewardsScreen');
+  const onPress = () => navigation.navigate('BountyScreen');
 
   const handleEndReached = () => fetchNextPage();
 
