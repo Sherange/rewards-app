@@ -1,16 +1,165 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# RewardsApp
 
-# Getting Started
+A modern React Native rewards application built with TypeScript, Redux Toolkit, and React Navigation. This app allows users to browse and claim various rewards/bounties with a clean, responsive interface.
+
+## 🏗️ App Architecture
+
+### Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── AppButton.tsx   # Custom button component
+│   └── AppImage.tsx    # Optimized image component
+├── config/             # Configuration files
+│   └── api.ts         # API configuration
+├── hooks/             # Custom React hooks
+│   └── useBounties.ts # Bounties data management hook
+├── navigation/        # Navigation configuration
+│   ├── TabNavigation.tsx
+│   ├── HomeStack.tsx
+│   └── types.ts
+├── screens/           # Screen components
+│   ├── HomeScreen.tsx
+│   ├── BountiesScreen.tsx
+│   └── BountyScreen.tsx
+├── store/            # Redux store configuration
+│   ├── index.ts
+│   └── bountiesSlice.ts
+├── types/            # TypeScript type definitions
+│   └── bounty.ts
+├── utils/            # Utility functions
+│   └── apiClient.ts
+└── __tests__/        # Test files
+```
+
+### Architecture Patterns
+
+- **Redux Toolkit**: State management with RTK Query for API calls
+- **React Navigation**: Tab-based navigation with stack navigators
+- **Custom Hooks**: Encapsulated business logic and state management
+- **TypeScript**: Full type safety throughout the application
+- **Component Composition**: Reusable, testable components
+- **Separation of Concerns**: Clear separation between UI, business logic, and data
+
+## 📦 Key Packages
+
+### Core Dependencies
+
+- **React Native 0.82.0**: Cross-platform mobile development
+- **React 19.1.1**: Latest React with concurrent features
+- **TypeScript 5.8.3**: Type safety and better developer experience
+
+### Navigation & UI
+
+- **@react-navigation/native**: Navigation library
+- **@react-navigation/bottom-tabs**: Tab navigation
+- **@react-navigation/native-stack**: Stack navigation
+- **react-native-safe-area-context**: Safe area handling
+- **react-native-screens**: Native screen optimization
+- **@react-native-vector-icons/material-icons**: Material Design icons
+
+### State Management & API
+
+- **@reduxjs/toolkit**: Modern Redux with less boilerplate
+- **react-redux**: React bindings for Redux
+- **axios**: HTTP client for API requests
+
+### Performance & Optimization
+
+- **react-native-fast-image**: Optimized image loading and caching
+
+### Development & Testing
+
+- **Jest**: Testing framework
+- **@testing-library/react-native**: React Native testing utilities
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+
+## 🎯 Coding Best Practices
+
+### TypeScript Usage
+
+- **Strict Type Safety**: All components, functions, and API responses are fully typed
+- **Interface Definitions**: Clear type definitions for all data structures
+- **Generic Types**: Proper use of generics for reusable components
+
+### Component Architecture
+
+- **Functional Components**: All components use React hooks
+- **Props Interface**: Every component has a well-defined props interface
+- **Accessibility**: Proper accessibility props and roles
+- **Test IDs**: Components include testID for testing
+
+### State Management
+
+- **Redux Toolkit**: Modern Redux with createSlice and createAsyncThunk
+- **Async Actions**: Proper error handling and loading states
+- **Normalized State**: Efficient state structure for API data
+- **Custom Hooks**: Encapsulated state logic in custom hooks
+
+### API Integration
+
+- **Axios Interceptors**: Centralized request/response handling
+- **Error Handling**: Comprehensive error handling with user feedback
+- **Loading States**: Proper loading indicators and states
+- **Pagination**: Infinite scroll with proper pagination handling
+
+### Code Organization
+
+- **Barrel Exports**: Clean import/export structure
+- **Separation of Concerns**: Clear separation between UI, business logic, and data
+- **Custom Hooks**: Business logic encapsulated in reusable hooks
+- **Utility Functions**: Reusable utility functions in dedicated files
+
+### Testing Strategy
+
+- **Component Testing**: Unit tests for components
+- **Mocking**: Proper mocking of external dependencies
+- **Test Coverage**: Comprehensive test coverage for critical paths
+
+## 🚀 Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
-## Step 1: Start Metro
+### Prerequisites
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- Node.js >= 20
+- React Native development environment
+- iOS Simulator (for iOS development)
+- Android Studio/Emulator (for Android development)
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Installation
 
-```sh
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd RewardsApp
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   # Using npm
+   npm install
+
+   # OR using Yarn
+   yarn install
+   ```
+
+3. **iOS Setup** (macOS only)
+   ```bash
+   # Install CocoaPods dependencies
+   bundle install
+   bundle exec pod install
+   ```
+
+### Development
+
+#### Start Metro Bundler
+
+```bash
 # Using npm
 npm start
 
@@ -18,80 +167,98 @@ npm start
 yarn start
 ```
 
-## Step 2: Build and run your app
+#### Run on Device/Simulator
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+**Android:**
 
-### Android
-
-```sh
-# Using npm
+```bash
 npm run android
-
-# OR using Yarn
+# OR
 yarn android
 ```
 
-### iOS
+**iOS:**
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+```bash
 npm run ios
-
-# OR using Yarn
+# OR
 yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Testing
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```bash
+# Run tests
+npm test
+# OR
+yarn test
 
-## Step 3: Modify your app
+# Run linting
+npm run lint
+# OR
+yarn lint
+```
 
-Now that you have successfully run the app, let's make changes!
+## 🔧 Configuration
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### API Configuration
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+Update the API base URL in `src/config/api.ts`:
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+```typescript
+export const API_CONFIG = {
+  BASE_URL: 'https://your-api-url.com/api/v1/',
+} as const;
+```
 
-## Congratulations! :tada:
+### Environment Variables
 
-You've successfully run and modified your React Native App. :partying_face:
+The app uses a staging API by default. Update the configuration for production use.
 
-### Now what?
+## 📱 Features
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- **Rewards Display**: Grid layout with infinite scroll
+- **Image Optimization**: Fast image loading with caching
+- **Responsive Design**: Adaptive layout for different screen sizes
+- **Error Handling**: User-friendly error messages
+- **Loading States**: Smooth loading indicators
+- **Navigation**: Tab-based navigation with stack navigators
+- **State Management**: Centralized state with Redux Toolkit
 
-# Troubleshooting
+## 🧪 Testing
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+The project includes comprehensive testing setup:
 
-# Learn More
+- **Unit Tests**: Component and utility function tests
+- **Integration Tests**: Navigation and state management tests
+- **Mocking**: Proper mocking of external dependencies
+- **Test Coverage**: Aim for high test coverage on critical paths
 
-To learn more about React Native, take a look at the following resources:
+## 📚 Learn More
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### React Native Resources
+
+- [React Native Website](https://reactnative.dev)
+- [React Native Documentation](https://reactnative.dev/docs/getting-started)
+- [React Navigation](https://reactnavigation.org/)
+
+### State Management
+
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [React Redux](https://react-redux.js.org/)
+
+### TypeScript
+
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+
+## 🐛 Troubleshooting
+
+If you're having issues:
+
+1. **Metro bundler issues**: Clear cache with `npx react-native start --reset-cache`
+2. **iOS build issues**: Clean and rebuild with `cd ios && xcodebuild clean`
+3. **Android build issues**: Clean gradle with `cd android && ./gradlew clean`
+4. **Dependency issues**: Delete `node_modules` and reinstall
+
+For more troubleshooting, see the [React Native Troubleshooting Guide](https://reactnative.dev/docs/troubleshooting).
