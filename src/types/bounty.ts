@@ -1,4 +1,4 @@
-export type Reward = {
+export type Bounty = {
   id: string;
   name: string;
   amount: number | null;
@@ -66,5 +66,5 @@ export type BountiesResponse = {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Reward[];
+  results: Bounty[];
 };

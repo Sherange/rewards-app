@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-import type { Reward } from '../types/reward';
+import type { Bounty } from '../types/Bounty';
 import { useBounties } from '../hooks/useBounties';
 import AppImage from '../components/AppImage';
 const { width } = Dimensions.get('window');
@@ -21,17 +21,13 @@ const CARD_WIDTH = (width - 48) / 2; // two columns + padding
 const HomeScreen = () => {
   const navigation = useNavigation();
 
-  const { data, loading, error, hasNextPage, fetchNextPage } = useBounties();
+  const { data, loading, error, fetchNextPage } = useBounties();
 
   const onPress = () => navigation.navigate('RewardsScreen');
 
-  const handleEndReached = () => {
-    if (hasNextPage && !loading) {
-      fetchNextPage();
-    }
-  };
+  const handleEndReached = () => fetchNextPage();
 
-  const renderItem = ({ item }: { item: Reward }) => (
+  const renderItem = ({ item }: { item: Bounty }) => (
     <Pressable style={styles.card} onPress={onPress}>
       <AppImage uri={item.image} style={styles.image} />
 
