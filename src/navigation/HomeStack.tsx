@@ -1,5 +1,5 @@
 import HomeScreen from '../screens/HomeScreen';
-import RewardsScreen from '../screens/RewardsScreen';
+import BountyScreen from '../screens/BountyScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { HomeStackParamList } from './types';
 
@@ -14,7 +14,7 @@ const HomeStack = () => {
       }}
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="RewardsScreen" component={RewardsScreen} />
+      <Stack.Screen name="BountyScreen" component={BountyScreen} />
     </Stack.Navigator>
   );
 };
