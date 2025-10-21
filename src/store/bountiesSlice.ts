@@ -23,6 +23,7 @@ export const fetchBounties = createAsyncThunk(
 interface BountiesState {
   data: Bounty[];
   collected: Bounty[];
+  claimedIds: string[];
   loading: boolean;
   error: string | null;
   hasNextPage: boolean;
@@ -35,6 +36,7 @@ interface BountiesState {
 const initialState: BountiesState = {
   data: [],
   collected: [],
+  claimedIds: [],
   loading: false,
   error: null,
   hasNextPage: false,
@@ -50,18 +52,28 @@ const bountiesSlice = createSlice({
   reducers: {
     addCollectedBounty: (state, action) => {
       const bounty = action.payload;
-      // prevent duplicates
-      const exists = state.collected.some(b => b.id === bounty.id);
+      const exists = state.claimedIds.includes(bounty.id);
+
       if (!exists) {
         state.collected.push(bounty);
+        state.claimedIds.push(bounty.id);
+        state.data = state.data.map(b =>
+          b.id === bounty.id ? { ...b, is_claimed: true } : b,
+        );
       }
     },
     removeCollectedBounty: (state, action) => {
       const bountyId = action.payload;
       state.collected = state.collected.filter(b => b.id !== bountyId);
+      state.claimedIds = state.claimedIds.filter(id => id !== bountyId);
+
+      state.data = state.data.map(b =>
+        b.id === bountyId ? { ...b, is_claimed: false } : b,
+      );
     },
     clearCollectedBounties: state => {
       state.collected = [];
+      state.claimedIds = [];
     },
   },
   extraReducers: builder => {
@@ -75,11 +87,17 @@ const bountiesSlice = createSlice({
         const { results, count, next, previous } = action.payload;
         const { arg } = action.meta;
 
+        // processed each bounty with is_claimed
+        const processed = results.map((bounty: any) => ({
+          ...bounty,
+          is_claimed: state.claimedIds.includes(bounty.id),
+        }));
+
         //Append Data for Pagination
         if (arg.page && arg.page > 1) {
-          state.data = [...state.data, ...results];
+          state.data = [...state.data, ...processed];
         } else {
-          state.data = results;
+          state.data = processed;
         }
 
         if (count) state.totalCount = count;

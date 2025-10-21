@@ -60,6 +60,7 @@ export type Bounty = {
   activation_description: string;
   bounty_activate_alert_header: string;
   bounty_activate_alert_text: string;
+  is_claimed: boolean;
 };
 
 export type BountiesResponse = {

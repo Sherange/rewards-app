@@ -24,15 +24,10 @@ const HomeScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { data, loading, error, fetchNextPage } = useBounties();
-
   const onPress = () => navigation.navigate('BountyScreen');
 
   const handleCollect = (bounty: any) => {
     dispatch(addCollectedBounty(bounty));
-  };
-
-  const handleUncollect = (id: string) => {
-    dispatch(removeCollectedBounty(id));
   };
 
   const handleEndReached = () => fetchNextPage();
