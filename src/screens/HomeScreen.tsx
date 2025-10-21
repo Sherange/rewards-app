@@ -1,46 +1,44 @@
 import {
-  Pressable,
   StyleSheet,
   Text,
-  Dimensions,
   FlatList,
-  Image,
   ActivityIndicator,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
 import type { Bounty } from '../types/Bounty';
 import { useBounties } from '../hooks/useBounties';
-import AppImage from '../components/AppImage';
-const { width } = Dimensions.get('window');
+import {
+  addCollectedBounty,
+  removeCollectedBounty,
+} from '../store/bountiesSlice';
+import GridCard from '../components/GridCard';
 
-const CARD_WIDTH = (width - 48) / 2; // two columns + padding
+import { AppDispatch } from '../store';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { data, loading, error, fetchNextPage } = useBounties();
 
   const onPress = () => navigation.navigate('BountyScreen');
 
+  const handleCollect = (bounty: any) => {
+    dispatch(addCollectedBounty(bounty));
+  };
+
+  const handleUncollect = (id: string) => {
+    dispatch(removeCollectedBounty(id));
+  };
+
   const handleEndReached = () => fetchNextPage();
 
   const renderItem = ({ item }: { item: Bounty }) => (
-    <Pressable style={styles.card} onPress={onPress}>
-      <AppImage uri={item.image} style={styles.image} />
-
-      <Text style={styles.name} numberOfLines={1} ellipsizeMode="clip">
-        {item.name}
-      </Text>
-      {item?.amount && (
-        <Text style={styles.amount}>$ {item.amount.toFixed(2)}</Text>
-      )}
-      <Pressable style={styles.claimButton}>
-        <Text style={styles.claimText}>Claim</Text>
-      </Pressable>
-    </Pressable>
+    <GridCard item={item} onPress={onPress} handleCollect={handleCollect} />
   );
 
   const renderFooter = () => {
@@ -97,7 +95,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: '#F8F9FB',
   },
   title: {
     fontSize: 24,
@@ -114,37 +112,6 @@ const styles = StyleSheet.create({
   column: {
     justifyContent: 'space-between',
     marginBottom: 16,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    width: CARD_WIDTH,
-    height: 200,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    padding: 8,
-  },
-  image: {
-    width: '100%',
-    height: 100,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    marginBottom: 8,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  amount: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#007bff',
-    marginBottom: 4,
   },
   footerLoader: {
     paddingVertical: 20,
@@ -172,22 +139,6 @@ const styles = StyleSheet.create({
     color: '#c62828',
     fontSize: 14,
     textAlign: 'center',
-  },
-  claimButton: {
-    position: 'absolute',
-    bottom: 8,
-    right: 8,
-    width: '100%',
-    backgroundColor: '#3276c3',
-    borderRadius: 8,
-  },
-  claimText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
   },
 });
 

@@ -1,14 +1,12 @@
 import { View, StyleSheet, Text } from 'react-native';
-import AppButton from '../components/AppButton';
 import { useNavigation } from '@react-navigation/native';
 
-const RewardsScreen = () => {
+const BountyScreen = () => {
   const navigation = useNavigation();
   const onPress = () => navigation.goBack();
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>RewardsScreen</Text>
-      <AppButton title="Go to Back" onPress={onPress} />
+      <Text style={styles.text}>Bounty Screen</Text>
     </View>
   );
 };
@@ -25,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RewardsScreen;
+export default BountyScreen;
