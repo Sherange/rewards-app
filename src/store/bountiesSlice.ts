@@ -22,6 +22,7 @@ export const fetchBounties = createAsyncThunk(
 
 interface BountiesState {
   data: Bounty[];
+  collected: Bounty[];
   loading: boolean;
   error: string | null;
   hasNextPage: boolean;
@@ -33,6 +34,7 @@ interface BountiesState {
 
 const initialState: BountiesState = {
   data: [],
+  collected: [],
   loading: false,
   error: null,
   hasNextPage: false,
@@ -46,7 +48,21 @@ const bountiesSlice = createSlice({
   name: 'rewards',
   initialState: initialState,
   reducers: {
-    addBounties(state, action) {},
+    addCollectedBounty: (state, action) => {
+      const bounty = action.payload;
+      // prevent duplicates
+      const exists = state.collected.some(b => b.id === bounty.id);
+      if (!exists) {
+        state.collected.push(bounty);
+      }
+    },
+    removeCollectedBounty: (state, action) => {
+      const bountyId = action.payload;
+      state.collected = state.collected.filter(b => b.id !== bountyId);
+    },
+    clearCollectedBounties: state => {
+      state.collected = [];
+    },
   },
   extraReducers: builder => {
     builder
@@ -78,5 +94,9 @@ const bountiesSlice = createSlice({
   },
 });
 
-export const { addBounties } = bountiesSlice.actions;
+export const {
+  addCollectedBounty,
+  removeCollectedBounty,
+  clearCollectedBounties,
+} = bountiesSlice.actions;
 export default bountiesSlice.reducer;

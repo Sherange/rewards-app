@@ -10,7 +10,7 @@ type GridCard = {
 
 const GridCard: React.FC<GridCard> = ({ item, onPress, handleCollect }) => {
   const { width } = Dimensions.get('window');
-
+  const is_claimed = false;
   const cardWidth = (width - 48) / 2;
 
   return (
@@ -54,18 +54,15 @@ const GridCard: React.FC<GridCard> = ({ item, onPress, handleCollect }) => {
           <Pressable
             style={[
               styles.claimButton,
-              !item.is_redeemable && styles.claimButtonDisabled,
+              is_claimed && styles.claimButtonDisabled,
             ]}
             onPress={() => handleCollect(item)}
-            disabled={!item.is_redeemable}
+            disabled={is_claimed}
           >
             <Text
-              style={[
-                styles.claimText,
-                !item.is_redeemable && styles.claimTextDisabled,
-              ]}
+              style={[styles.claimText, is_claimed && styles.claimTextDisabled]}
             >
-              {item.is_redeemable ? 'Claim' : 'Not Available'}
+              {!is_claimed ? 'Claim' : 'Not Available'}
             </Text>
           </Pressable>
         </View>
