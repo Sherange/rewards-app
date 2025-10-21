@@ -2,6 +2,10 @@
 
 A modern React Native rewards application built with TypeScript, Redux Toolkit, and React Navigation. This app allows users to browse and claim various rewards/bounties with a clean, responsive interface.
 
+| Home Screen                                            | Collected Bounties Screen                                  |
+| ------------------------------------------------------ | ---------------------------------------------------------- |
+| <img src="src/assets/home.png" width="200" alt="Logo"> | <img src="src/assets/bounties.png" width="200" alt="Logo"> |
+
 ## 🏗️ App Architecture
 
 ### Project Structure
